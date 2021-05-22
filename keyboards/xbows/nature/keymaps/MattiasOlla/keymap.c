@@ -23,24 +23,55 @@ const char *swedish_codes[][2] = {
     },
 };
 
+uint8_t mods;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (!record->event.pressed) return true;
-  switch (keycode) {
-    case SE_AA: case SE_AE: case SE_OE: {
-      uint8_t mods = get_mods();
-      clear_mods();
-      // Send code based on which key was pressed and whether Shift was held.
-      uint16_t index = keycode - SE_AA;
-      uint8_t shift = mods & MODS_SHIFT_MASK;
+    mods = get_mods();
+    switch (keycode) {
+        case SE_AA: case SE_AE: case SE_OE: {
+            if (!record->event.pressed) return true;
 
-      send_string(swedish_codes[index][(bool)shift]);
+            clear_mods();
+            // Send code based on which key was pressed and whether Shift was held.
+            uint16_t index = keycode - SE_AA;
+            uint8_t shift = mods & MODS_SHIFT_MASK;
 
-      set_mods(mods);
-      return false;
+            send_string(swedish_codes[index][(bool)shift]);
+
+            set_mods(mods);
+            return false;
+        }
+        case KC_BSPC: {
+            // Initialize a boolean variable that keeps track
+            // of the delete key status: registered or not?
+            static bool delkey_registered;
+            if (record->event.pressed) {
+                // Detect the activation of either shift keys
+                if (mods & MOD_MASK_SHIFT) {
+                    // First temporarily canceling both shifts so that
+                    // shift isn't applied to the KC_DEL keycode
+                    del_mods(MOD_MASK_SHIFT);
+                    register_code(KC_DEL);
+                    // Update the boolean variable to reflect the status of KC_DEL
+                    delkey_registered = true;
+                    // Reapplying modifier state so that the held shift key(s)
+                    // still work even after having tapped the Backspace/Delete key.
+                    set_mods(mods);
+                    return false;
+                }
+            } else { // on release of KC_BSPC
+                // In case KC_DEL is still being sent even after the release of KC_BSPC
+                if (delkey_registered) {
+                    unregister_code(KC_DEL);
+                    delkey_registered = false;
+                    return false;
+                }
+            }
+            // Let QMK process the KC_BSPC keycode as usual outside of shift
+            return true;
+        }
+        default:
+            return true;
     }
-    default:
-      return true;
-  }
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
