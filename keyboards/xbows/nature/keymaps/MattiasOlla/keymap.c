@@ -6,9 +6,10 @@ enum custom_keycodes {
     SE_AA = SAFE_RANGE,
     SE_AE,
     SE_OE,
+    SW_LINUX,
 };
 
-const char *swedish_codes[][2] = {
+const char *swedish_codes_windows[][2] = {
     {
         SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_3) SS_TAP(X_KP_4)),  // Alt 134 -> å
         SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_4) SS_TAP(X_KP_3)),  // Alt 143 -> Å
@@ -23,8 +24,25 @@ const char *swedish_codes[][2] = {
     },
 };
 
+const char *swedish_codes_linux[][2] = {
+    {
+        SS_LCTL(SS_LSFT("u") "e5"),  // Ctrl Shift U + "e5 " -> å
+        SS_LCTL(SS_LSFT("u") "c5"),  // Ctrl Shift U + "c5 " -> Å
+    },
+    {
+        SS_LCTL(SS_LSFT("u") "e4"),  // Ctrl Shift U + "e4 " -> ä
+        SS_LCTL(SS_LSFT("u") "c4"),  // Ctrl Shift U + "c4 " -> Ä
+    },
+    {
+        SS_LCTL(SS_LSFT("u") "f6"),  // Ctrl Shift U + "f6 " -> ö
+        SS_LCTL(SS_LSFT("u") "d6"),  // Ctrl Shift U + "d6 " -> Ö
+    },
+};
+
 uint8_t mods;
-bool    process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool    linux_enabled = false;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mods = get_mods();
     switch (keycode) {
         case SE_AA:
@@ -37,10 +55,18 @@ bool    process_record_user(uint16_t keycode, keyrecord_t *record) {
             uint16_t index = keycode - SE_AA;
             uint8_t  shift = mods & MODS_SHIFT_MASK;
 
-            send_string(swedish_codes[index][(bool)shift]);
+            if (linux_enabled) {
+                send_string(swedish_codes_linux[index][(bool)shift]);
+            } else {
+                send_string(swedish_codes_windows[index][(bool)shift]);
+            }
 
             set_mods(mods);
             return false;
+        }
+        case SW_LINUX: {
+            if (!record->event.pressed) return true;
+            linux_enabled = !linux_enabled;
         }
         case KC_BSPC: {
             // Initialize a boolean variable that keeps track
@@ -111,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RGB_TOG,       RGB_MOD, RGB_VAI,    RGB_HUI,  KC_TRNS, KC_TRNS,                           KC_TRNS, KC_TRNS, KC_UP,   KC_TRNS,    KC_TRNS, SE_AA,   KC_TRNS, KC_TRNS, KC_MNXT,
         KC_TRNS,       RGB_SPD, RGB_VAD,    RGB_SPI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT,    SE_OE,   SE_AE,   KC_TRNS,          KC_MPRV,
         KC_TRNS,       KC_TRNS, KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS, KC_MINS, S(KC_MINS), KC_TRNS, KC_MUTE,          KC_VOLU,
-        MO(2),         KC_TRNS, KC_TRNS,              KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS, KC_MPLY, KC_HOME, KC_VOLD, KC_END
+        MO(2),         KC_TRNS, SW_LINUX,             KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS, KC_MPLY, KC_HOME, KC_VOLD, KC_END
     ),
     [2] = LAYOUT(
         KC_TRNS,       KC_TRNS, KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,          KC_TRNS,
