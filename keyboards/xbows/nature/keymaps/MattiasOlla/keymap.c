@@ -137,15 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RGB_TOG,       RGB_MOD, RGB_VAI,    RGB_HUI,  KC_TRNS, KC_TRNS,                           KC_TRNS, KC_TRNS, KC_UP,   KC_TRNS,    KC_TRNS, SE_AA,   KC_TRNS, KC_TRNS, KC_MNXT,
         KC_TRNS,       RGB_SPD, RGB_VAD,    RGB_SPI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT,    SE_OE,   SE_AE,   KC_TRNS,          KC_MPRV,
         KC_TRNS,       KC_TRNS, KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS, KC_MINS, S(KC_MINS), KC_TRNS, KC_MUTE,          KC_VOLU,
-        MO(2),         KC_TRNS, SW_LINUX,             KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS, KC_MPLY, KC_HOME, KC_VOLD, KC_END
-    ),
-    [2] = LAYOUT(
-        KC_TRNS,       KC_TRNS, KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,          KC_TRNS,
-        KC_TRNS,       KC_TRNS, KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS,                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS,       KC_TRNS, KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS,                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS,       KC_TRNS, SGUI(KC_S), KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,
-        KC_TRNS,       KC_TRNS, KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,          KC_TRNS,
-        KC_TRNS,       KC_TRNS, KC_TRNS,              KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS, KC_TRNS, WS_LEFT, KC_TRNS, WS_RGHT
+        KC_TRNS,       KC_TRNS, SW_LINUX,             KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS, KC_MPLY, KC_HOME, KC_VOLD, KC_END
     )
     // clang-format on
 };
