@@ -75,6 +75,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING("->");
             return false;
         }
+        case ARROW: {
+            if (!record->event.pressed) return true;
+            SEND_STRING("->");
+        }
         case KC_BSPC: {
             // Initialize a boolean variable that keeps track
             // of the delete key status: registered or not?
