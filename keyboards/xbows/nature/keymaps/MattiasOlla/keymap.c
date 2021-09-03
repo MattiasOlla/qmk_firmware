@@ -7,6 +7,7 @@ enum custom_keycodes {
     SE_AE,
     SE_OE,
     SW_LINUX,
+    ARROW,
 };
 
 const char *swedish_codes_windows[][2] = {
@@ -67,6 +68,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SW_LINUX: {
             if (!record->event.pressed) return true;
             linux_enabled = !linux_enabled;
+        }
+        case ARROW: {
+            if (!record->event.pressed) return true;
+            SEND_STRING("->");
         }
         case KC_BSPC: {
             // Initialize a boolean variable that keeps track
@@ -136,7 +141,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS,    KC_TRNS, KC_TRNS, KC_NLCK,
         RGB_TOG,  RGB_MOD, RGB_VAI, RGB_HUI,  KC_TRNS, KC_TRNS,                           KC_BSLS, KC_EQL,  KC_UP,   S(KC_EQL),  S(KC_BSLS), SE_AA,   KC_TRNS, KC_TRNS, KC_MNXT,
         KC_TRNS,  RGB_SPD, RGB_VAD, RGB_SPI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT,    SE_OE,      SE_AE,   KC_TRNS,          KC_MPRV,
-        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_HOME, KC_END,  KC_MINS, S(KC_MINS), KC_TRNS,    KC_MUTE,          KC_VOLU,
+        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_HOME, KC_END,  KC_MINS, S(KC_MINS), ARROW,      KC_MUTE,          KC_VOLU,
         SW_LINUX, KC_TRNS, KC_TRNS,           KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS,    KC_MPLY, KC_HOME, KC_VOLD, KC_END
     )
     // clang-format on
