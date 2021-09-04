@@ -68,10 +68,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SW_LINUX: {
             if (!record->event.pressed) return true;
             linux_enabled = !linux_enabled;
+            return false;
         }
         case ARROW: {
             if (!record->event.pressed) return true;
             SEND_STRING("->");
+            return false;
         }
         case KC_BSPC: {
             // Initialize a boolean variable that keeps track
