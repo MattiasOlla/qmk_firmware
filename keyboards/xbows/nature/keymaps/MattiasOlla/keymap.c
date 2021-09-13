@@ -6,6 +6,7 @@ enum custom_keycodes {
     SE_AA = SAFE_RANGE,
     SE_AE,
     SE_OE,
+    E_ACC,
     SW_LINUX,
     ARROW,
 };
@@ -23,6 +24,10 @@ const char *swedish_codes_windows[][2] = {
         SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_4) SS_TAP(X_KP_8)),  // Alt 148 -> ö
         SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_5) SS_TAP(X_KP_3)),  // Alt 153 -> Ö
     },
+    {
+        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_3) SS_TAP(X_KP_0)),  // Alt 130 -> é
+        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_4) SS_TAP(X_KP_4)),  // Alt 144 -> É
+    },
 };
 
 const char *swedish_codes_linux[][2] = {
@@ -38,6 +43,10 @@ const char *swedish_codes_linux[][2] = {
         SS_LCTL(SS_LSFT("u") "f6"),  // Ctrl Shift U + "f6 " -> ö
         SS_LCTL(SS_LSFT("u") "d6"),  // Ctrl Shift U + "d6 " -> Ö
     },
+    {
+        SS_LCTL(SS_LSFT("u") "e9"),  // Ctrl Shift U + "e9 " -> é
+        SS_LCTL(SS_LSFT("u") "c9"),  // Ctrl Shift U + "c9 " -> É
+    },
 };
 
 uint8_t mods;
@@ -48,7 +57,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case SE_AA:
         case SE_AE:
-        case SE_OE: {
+        case SE_OE:
+        case E_ACC: {
             if (!record->event.pressed) return true;
 
             clear_mods();
@@ -141,9 +151,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [1] = LAYOUT(
         RESET,    KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS,   KC_TRNS, KC_CALC, KC_MYCM, KC_MSEL,    KC_MAIL,    NK_TOGG,          EEP_RST,
         KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS,    KC_TRNS, KC_TRNS, KC_NLCK,
-        RGB_TOG,  RGB_MOD, RGB_VAI, RGB_HUI,  KC_TRNS, KC_TRNS,                           KC_BSLS, KC_EQL,  KC_UP,   S(KC_EQL),  S(KC_BSLS), SE_AA,   KC_TRNS, KC_TRNS, KC_MNXT,
+        RGB_TOG,  RGB_MOD, RGB_VAI, E_ACC,    KC_TRNS, KC_TRNS,                           KC_BSLS, KC_EQL,  KC_UP,   S(KC_EQL),  S(KC_BSLS), SE_AA,   KC_TRNS, KC_TRNS, KC_MNXT,
         KC_TRNS,  RGB_SPD, RGB_VAD, RGB_SPI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT,    SE_OE,      SE_AE,   KC_TRNS,          KC_MPRV,
-        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_HOME, KC_END,  KC_MINS, S(KC_MINS), ARROW,      KC_MUTE,          KC_VOLU,
+        KC_TRNS,  KC_TRNS, KC_TRNS, RGB_HUI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_HOME, KC_END,  KC_MINS, S(KC_MINS), ARROW,      KC_MUTE,          KC_VOLU,
         SW_LINUX, KC_TRNS, KC_TRNS,           KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS,    KC_MPLY, KC_HOME, KC_VOLD, KC_END
     )
     // clang-format on
