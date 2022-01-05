@@ -1,88 +1,102 @@
 #include QMK_KEYBOARD_H
+#include "sendstring_swedish.h"
 
 #define MODS_SHIFT_MASK (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT))
 
 enum custom_keycodes {
-    SE_AA = SAFE_RANGE,
-    SE_AE,
-    SE_OE,
-    E_ACC,
-    SW_LINUX,
+    MO_GRV = SAFE_RANGE,
+    MO_1,
+    MO_2,
+    MO_3,
+    MO_4,
+    MO_5,
+    MO_6,
+    MO_7,
+    MO_8,
+    MO_9,
+    MO_0,
+    MO_MINS,
+    MO_EQL,
+    MO_LBRC,
+    MO_RBRC,
+    MO_BSLS,
+    MO_SCLN,
+    MO_QUOT,
+    MO_COMM,
+    MO_DOT,
+    MO_SLSH,
     ARROW,
+    E_ACC
 };
 
-const char *swedish_codes_windows[][2] = {
-    {
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_3) SS_TAP(X_KP_4)),  // Alt 134 -> å
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_4) SS_TAP(X_KP_3)),  // Alt 143 -> Å
-    },
-    {
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_3) SS_TAP(X_KP_2)),  // Alt 132 -> ä
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_4) SS_TAP(X_KP_2)),  // Alt 142 -> Ä
-    },
-    {
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_4) SS_TAP(X_KP_8)),  // Alt 148 -> ö
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_5) SS_TAP(X_KP_3)),  // Alt 153 -> Ö
-    },
-    {
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_3) SS_TAP(X_KP_0)),  // Alt 130 -> é
-        SS_RALT(SS_TAP(X_KP_1) SS_TAP(X_KP_4) SS_TAP(X_KP_4)),  // Alt 144 -> É
-    },
-};
-
-const char *swedish_codes_linux[][2] = {
-    {
-        SS_LCTL(SS_LSFT("u") "e5"),  // Ctrl Shift U + "e5 " -> å
-        SS_LCTL(SS_LSFT("u") "c5"),  // Ctrl Shift U + "c5 " -> Å
-    },
-    {
-        SS_LCTL(SS_LSFT("u") "e4"),  // Ctrl Shift U + "e4 " -> ä
-        SS_LCTL(SS_LSFT("u") "c4"),  // Ctrl Shift U + "c4 " -> Ä
-    },
-    {
-        SS_LCTL(SS_LSFT("u") "f6"),  // Ctrl Shift U + "f6 " -> ö
-        SS_LCTL(SS_LSFT("u") "d6"),  // Ctrl Shift U + "d6 " -> Ö
-    },
-    {
-        SS_LCTL(SS_LSFT("u") "e9"),  // Ctrl Shift U + "e9 " -> é
-        SS_LCTL(SS_LSFT("u") "c9"),  // Ctrl Shift U + "c9 " -> É
-    },
+const char *codes[][2] = {
+    /* MO_GRV */  {"` ", "~ "}, // Backtick and tilde are dead keys, send space to escape
+    /* MO_1 */    {"1", "!"},
+    /* MO_2 */    {"2", "@"},
+    /* MO_3 */    {"3", "#"},
+    /* MO_4 */    {"4", "$"},
+    /* MO_5 */    {"5", "%"},
+    /* MO_6 */    {"6", "^ "}, // Circumflex is dead key, send space to escape
+    /* MO_7 */    {"7", "&"},
+    /* MO_8 */    {"8", "*"},
+    /* MO_9 */    {"9", "("},
+    /* MO_0 */    {"0", ")"},
+    /* MO_MINS */ {"-", "_"},
+    /* MO_EQL */  {"=", "+"},
+    /* MO_LBRC */ {"[", "{"},
+    /* MO_RBRC */ {"]", "}"},
+    /* MO_BSLS */ {"\\", "|"},
+    /* MO_SCLN */ {";", ":"},
+    /* MO_QUOT */ {"'", "\""},
+    /* MO_COMM */ {",", "<"},
+    /* MO_DOT */  {".", ">"},
+    /* MO_SLSH */ {"/", "?"},
+    /* ARROW  */  {"->", "->"}
 };
 
 uint8_t mods;
-bool    linux_enabled = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mods = get_mods();
     switch (keycode) {
-        case SE_AA:
-        case SE_AE:
-        case SE_OE:
-        case E_ACC: {
+        case MO_GRV:
+        case MO_1:
+        case MO_2:
+        case MO_3:
+        case MO_4:
+        case MO_5:
+        case MO_6:
+        case MO_7:
+        case MO_8:
+        case MO_9:
+        case MO_0:
+        case MO_MINS:
+        case MO_EQL:
+        case MO_LBRC:
+        case MO_RBRC:
+        case MO_BSLS:
+        case MO_SCLN:
+        case MO_QUOT:
+        case MO_COMM:
+        case MO_DOT:
+        case MO_SLSH:
+        case ARROW: {
             if (!record->event.pressed) return true;
 
             clear_mods();
             // Send code based on which key was pressed and whether Shift was held.
-            uint16_t index = keycode - SE_AA;
-            uint8_t  shift = mods & MODS_SHIFT_MASK;
+            uint16_t index = keycode - SAFE_RANGE;
+            bool shift = (bool)(mods & MODS_SHIFT_MASK);
 
-            if (linux_enabled) {
-                send_string(swedish_codes_linux[index][(bool)shift]);
-            } else {
-                send_string(swedish_codes_windows[index][(bool)shift]);
-            }
+            send_string(codes[index][shift]);
 
             set_mods(mods);
             return false;
         }
-        case SW_LINUX: {
+        case E_ACC: {
             if (!record->event.pressed) return true;
-            linux_enabled = !linux_enabled;
-            return false;
-        }
-        case ARROW: {
-            if (!record->event.pressed) return true;
-            SEND_STRING("->");
+            tap_code(SE_ACUT);
+            tap_code(SE_E);
             return false;
         }
         case KC_BSPC: {
@@ -119,9 +133,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-const uint16_t WS_LEFT = SGUI(KC_LEFT);
-const uint16_t WS_RGHT = SGUI(KC_RGHT);
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap VANILLA: (Base Layer) Default Layer
      *
@@ -142,19 +153,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // clang-format off
     [0] = LAYOUT(
         KC_ESC,   KC_F1,   KC_F2,   KC_F3,    KC_F4,   KC_F5,   KC_F6,         KC_F7,     KC_F8,   KC_F9,   KC_F10,  KC_F11,     KC_F12,     KC_DEL,           KC_PSCR,
-        KC_GRV,   KC_1,    KC_2,    KC_3,     KC_4,    KC_5,                              KC_6,    KC_7,    KC_8,    KC_9,       KC_0,       KC_MINS, KC_EQL,  KC_BSPC,
-        KC_TAB,   KC_Q,    KC_W,    KC_E,     KC_R,    KC_T,                              KC_Y,    KC_U,    KC_I,    KC_O,       KC_P,       KC_LBRC, KC_RBRC, KC_BSLS, KC_PGUP,
-        KC_CAPS,  KC_A,    KC_S,    KC_D,     KC_F,    KC_G,            KC_BSPC,          KC_H,    KC_J,    KC_K,    KC_L,       KC_SCLN,    KC_QUOT, KC_ENT,           KC_PGDN,
-        KC_LSFT,  KC_Z,    KC_X,    KC_C,     KC_V,    KC_B,            KC_ENT,           KC_N,    KC_M,    KC_COMM, KC_DOT,     KC_SLSH,    KC_RSFT,          KC_UP,
+        MO_GRV,   MO_1,    MO_2,    MO_3,     MO_4,    MO_5,                              MO_6,    MO_7,    MO_8,    MO_9,       MO_0,       MO_MINS, MO_EQL,  KC_BSPC,
+        KC_TAB,   KC_Q,    KC_W,    KC_E,     KC_R,    KC_T,                              KC_Y,    KC_U,    KC_I,    KC_O,       KC_P,       MO_LBRC, MO_RBRC, MO_BSLS, KC_PGUP,
+        KC_CAPS,  KC_A,    KC_S,    KC_D,     KC_F,    KC_G,            KC_BSPC,          KC_H,    KC_J,    KC_K,    KC_L,       MO_SCLN,    MO_QUOT, KC_ENT,           KC_PGDN,
+        KC_LSFT,  KC_Z,    KC_X,    KC_C,     KC_V,    KC_B,            KC_ENT,           KC_N,    KC_M,    MO_COMM, MO_DOT,     MO_SLSH,    KC_RSFT,          KC_UP,
         KC_LCTL,  MO(1),   LALT_T(KC_SPC),    KC_SPC,           CTL_T(KC_TAB), KC_LSFT,   KC_SPC,           RALT_T(KC_SPC),      KC_LGUI,    KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
     [1] = LAYOUT(
         RESET,    KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS,   KC_TRNS, KC_CALC, KC_MYCM, KC_MSEL,    KC_MAIL,    NK_TOGG,          EEP_RST,
         KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS,    KC_TRNS, KC_TRNS, KC_NLCK,
-        RGB_TOG,  RGB_MOD, RGB_VAI, E_ACC,    KC_TRNS, KC_TRNS,                           KC_BSLS, KC_EQL,  KC_UP,   S(KC_EQL),  S(KC_BSLS), SE_AA,   KC_TRNS, KC_TRNS, KC_MNXT,
-        KC_TRNS,  RGB_SPD, RGB_VAD, RGB_SPI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT,    SE_OE,      SE_AE,   KC_TRNS,          KC_MPRV,
-        KC_TRNS,  KC_TRNS, KC_TRNS, RGB_HUI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_HOME, KC_END,  KC_MINS, S(KC_MINS), ARROW,      KC_MUTE,          KC_VOLU,
-        SW_LINUX, KC_TRNS, KC_TRNS,           KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS,    KC_MPLY, KC_HOME, KC_VOLD, KC_END
+        RGB_TOG,  RGB_MOD, RGB_VAI, E_ACC,    KC_TRNS, KC_TRNS,                           SE_BSLS, SE_EQL,  KC_UP,   SE_PLUS,    SE_PIPE,    SE_ARNG, KC_TRNS, KC_TRNS, KC_MNXT,
+        KC_TRNS,  RGB_SPD, RGB_VAD, RGB_SPI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT,    SE_ODIA,    SE_ADIA, KC_TRNS,          KC_MPRV,
+        KC_TRNS,  KC_TRNS, KC_TRNS, RGB_HUI,  KC_TRNS, KC_TRNS,         KC_TRNS,          KC_HOME, KC_END,  SE_MINS, SE_UNDS,    ARROW,      KC_MUTE,          KC_VOLU,
+        KC_TRNS,  KC_TRNS, KC_TRNS,           KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS,    KC_MPLY, KC_HOME, KC_VOLD, KC_END
     )
     // clang-format on
 };
