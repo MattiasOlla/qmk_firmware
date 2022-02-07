@@ -106,11 +106,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [1] = LAYOUT(
         RESET,    KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,        KC_TRNS,   KC_TRNS, KC_CALC, KC_MYCM, KC_MSEL,    KC_MAIL,    NK_TOGG,          EEP_RST,
-        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS,    KC_TRNS, KC_TRNS, KC_NLCK,
+        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,                            KC_TRNS, KC_ESC,  KC_TRNS, KC_TRNS,    KC_TRNS,    KC_TRNS, KC_TRNS, KC_NLCK,
         RGB_TOG,  RGB_MOD, RGB_VAI, US_EACU,  KC_TRNS, KC_TRNS,                            KC_BSLS, KC_EQL,  KC_UP,   S(KC_EQL),  S(KC_BSLS), US_ARNG, KC_TRNS, KC_TRNS, KC_MNXT,
         KC_TRNS,  RGB_SPD, RGB_VAD, RGB_SPI,  KC_TRNS, KC_TRNS,          KC_TRNS,          KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT,    US_ODIA,    US_ADIA, KC_TRNS,          KC_MPRV,
         KC_TRNS,  KC_TRNS, KC_TRNS, RGB_HUI,  KC_TRNS, KC_TRNS,          KC_TRNS,          KC_HOME, KC_END,  KC_MINS, S(KC_MINS), ARROW,      KC_MUTE,          KC_VOLU,
-        KC_TRNS,  KC_TRNS, KC_TRNS,          KC_TRNS,          KC_TRNS,       KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS,    KC_MPLY, KC_HOME, KC_VOLD, KC_END
+        KC_TRNS,  KC_TRNS, KC_TRNS,           KC_TRNS,          KC_TRNS,        KC_TRNS,   KC_TRNS,          KC_TRNS,             KC_TRNS,    KC_MPLY, KC_HOME, KC_VOLD, KC_END
     )
     // clang-format on
 };
